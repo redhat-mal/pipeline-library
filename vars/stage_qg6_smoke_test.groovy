@@ -15,7 +15,7 @@ def call() {
 			
 			try {
 				echo 'Run the Docker Image'
-				def ocp_run = 'oc run ' + SERVICE_NAME + '-smoke' -env "PHASE=SMOKE_TEST" -P' + ' --name=' + --image=' + IMAGE_NAME
+				def ocp_run = 'oc run ' + SERVICE_NAME + '-smoke -env PHASE=SMOKE_TEST --image=' + IMAGE_NAME
 				sh ocp_run
 
 				echo 'Check the status of the Docker Container. If the status is not running, sleep for a defined interval of 1 sec and check again until 1 min timeout'
