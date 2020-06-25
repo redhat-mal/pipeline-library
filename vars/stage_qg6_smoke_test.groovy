@@ -6,7 +6,7 @@ def call() {
 			echo 'Stop and remove the existing container (If any exists)'
 			try {
 				//def pod_stop = 'docker stop ' + SERVICE_NAME
-				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke'
+				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT
 				sh ocp_remove
 			} catch (Exception ex) {
 				println("Unable to stop and/or remove the ocp container - " + SERVICE_NAME);
@@ -16,11 +16,11 @@ def call() {
 			try {
 				echo 'Run the Docker Image'
 				def ocp_run = 'oc run ' + SERVICE_NAME + '-smoke --env PHASE=SMOKE_TEST --image=' + IMAGE_NAME
-				sh ocp_run
+				sh ocp_run + ' --restart=Never -n ' + DEV_PROJECT
 
 				echo 'Check the status of the Docker Container. If the status is not running, sleep for a defined interval of 1 sec and check again until 1 min timeout'
 				timeout(time: 1, unit: 'MINUTES') {
-					def wait_for_ocp = 'until [ "`oc get pods ' + SERVICE_NAME + '-smoke --no-headers  |  awk {"print $3"}`"=="Running" ]; do sleep 1; done;'
+					def wait_for_ocp = 'until [ "`oc get pods ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT + ' --no-headers  |  awk {"print $3"}`"=="Running" ]; do sleep 1; done;'
 					println("Sleeping for 1 sec and wait for the Docker Container - " + SERVICE_NAME + " to start");
                                         println("CMD:" + wait_for_ocp);
 					sh wait_for_ocp
