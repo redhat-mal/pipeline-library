@@ -35,6 +35,7 @@ def call() {
 				//def inspectCmd = 'docker inspect --format=' + '\'' + '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' + '\' ' + SERVICE_NAME
 				APP_PORT =  "8080"
                                 def svcCmd = 'oc create svc clusterip' + SERVICE_NAME + '-smoke --tcp=8080:8080'
+                                sh svcCmd
 				APP_URL = "http://" + SERVICE_NAME + "-smoke:" + APP_PORT
 				println("OCP Container - " + SERVICE_NAME + " - Application Url: " + APP_URL);
 
