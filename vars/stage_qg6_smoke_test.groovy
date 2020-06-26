@@ -8,6 +8,9 @@ def call() {
 				//def pod_stop = 'docker stop ' + SERVICE_NAME
 				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT
 				sh ocp_remove
+                                def ocp_svc_remove = 'oc delete svc ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT
+                                sh ocp_svc_remove
+
 			} catch (Exception ex) {
 				println("Unable to stop and/or remove the ocp container - " + SERVICE_NAME);
 				println(ex.getStackTrace());
@@ -29,11 +32,11 @@ def call() {
 				}
 
 				echo 'Identify the Port and the Url of the docker container'
-				def inspectCmd = 'docker inspect --format=' + '\'' + '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' + '\' ' + SERVICE_NAME
-				APP_PORT =  sh (script: inspectCmd, returnStdout: true).trim()
-				println("Docker Container - " + SERVICE_NAME + " is running on Port: " + APP_PORT);
-				APP_URL = "http://" + env.NODE_NAME + ":" + APP_PORT
-				println("Docker Container - " + SERVICE_NAME + " - Application Url: " + APP_URL);
+				//def inspectCmd = 'docker inspect --format=' + '\'' + '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' + '\' ' + SERVICE_NAME
+				APP_PORT =  "8080"
+                                def svcCmd = 'oc create svc clusterip' + SERVICE_NAME + '-smoke --tcp=8080:8080'
+				APP_URL = "http://" + SERVICE_NAME + "." + env.NODE_NAME + ":" + APP_PORT
+				println("OCP Container - " + SERVICE_NAME + " - Application Url: " + APP_URL);
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
 				timeout(time: 5, unit: 'MINUTES') {
