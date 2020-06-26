@@ -20,7 +20,7 @@ def call() {
 
 				echo 'Check the status of the Docker Container. If the status is not running, sleep for a defined interval of 1 sec and check again until 1 min timeout'
 				timeout(time: 1, unit: 'MINUTES') {
-                                        def wait_for_ocp = 'while [ "`oc get pods ' + SERVICE_NAME + '-smoke -n att-dev --no-headers |  awk \'{print $3}\'`" != "Runnin" ]; do echo $i; done;';
+                                        def wait_for_ocp = 'while [ "`oc get pods ' + SERVICE_NAME + '-smoke -n att-dev --no-headers |  awk \'{print $3}\'`" != "Running" ]; do echo $i; done;';
 
 					//def wait_for_ocp = 'until [ "`oc get pods ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT + ' --no-headers  |  awk {"print $3"}`"=="Running" ]; do sleep 1; done;'
 					println("Sleeping for 1 sec and wait for the Docker Container - " + SERVICE_NAME + " to start");
