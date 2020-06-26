@@ -43,7 +43,7 @@ def call() {
 				timeout(time: 5, unit: 'MINUTES') {
                                         println("Check APP");
 					def url = APP_URL + SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
-
+                                        println("URL:" + url);
 					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + ')i; do sleep 5; done;'
                                         println("wait:" + wait_for_app);
 					println("Sleeping for 5 sec and wait for the Spring Boot App to startup - " + url);
