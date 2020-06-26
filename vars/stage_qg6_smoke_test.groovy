@@ -41,8 +41,7 @@ def call() {
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
 				timeout(time: 5, unit: 'MINUTES') {
-					def url = APP_URL
-                                        //  + env.SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
+					def url = APP_URL + SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
 
 					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + '); do sleep 5; done;'
 					println("Sleeping for 5 sec and wait for the Spring Boot App to startup - " + url);
@@ -62,7 +61,7 @@ def call() {
     			}
 			}
 			
-			smoke_testing_script = "curl -s -o /dev/null -w '%{http_code}' --noproxy '*' --request GET --url " + APP_URL +  env.SERVLET_CONTEXT_PATH  + "/actuator/heartbeat"
+			smoke_testing_script = "curl -s -o /dev/null -w '%{http_code}' --noproxy '*' --request GET --url " + APP_URL +  SERVLET_CONTEXT_PATH  + "/actuator/heartbeat"
 			
 			def HTTP_STATUS = sh (script: smoke_testing_script, returnStdout: true).trim()
 			println("Http status code returned from the Health Check Url - " + HTTP_STATUS);
