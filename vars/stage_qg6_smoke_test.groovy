@@ -1,5 +1,6 @@
 def call() {
 	env.CHECKOUT_STATUS='false'
+        env.SERVLET_CONTEXT_PATH=""
 	//if (func_not_skip_quality_gate('QG6')) {
 		//func_idp_monitor_stage ('Smoke Test - QG6') {
 			echo 'Stage: Smoke Test - Start'
@@ -41,8 +42,8 @@ def call() {
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
 				timeout(time: 5, unit: 'MINUTES') {
-                                        println("Check APP" + SERVLET_CONTEXT_PATH);
-					def url = APP_URL + SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
+                                        println("Check APP" + env.SERVLET_CONTEXT_PATH);
+					def url = APP_URL + env.SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
                                         println("URL:" + url);
 					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + ')i; do sleep 5; done;'
                                         println("wait:" + wait_for_app);
@@ -63,7 +64,7 @@ def call() {
     			}
 			}
 			
-			smoke_testing_script = "curl -s -o /dev/null -w '%{http_code}' --noproxy '*' --request GET --url " + APP_URL +  SERVLET_CONTEXT_PATH  + "/actuator/heartbeat"
+			smoke_testing_script = "curl -s -o /dev/null -w '%{http_code}' --noproxy '*' --request GET --url " + APP_URL +  env.SERVLET_CONTEXT_PATH  + "/actuator/heartbeat"
 			
 			def HTTP_STATUS = sh (script: smoke_testing_script, returnStdout: true).trim()
 			println("Http status code returned from the Health Check Url - " + HTTP_STATUS);
