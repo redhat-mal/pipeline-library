@@ -48,7 +48,7 @@ def call() {
 					sh wait_for_app
 				}
 			} catch (Exception ex) {
-				def ocp_logs = 'ocp logs ' + SERVICE_NAME + '-smoke'
+				def ocp_logs = 'oc logs ' + SERVICE_NAME + '-smoke'
 				println("Smoke Testing Failed - Docker Logs - ");
 				sh ocp_logs
 				println("Exception while trying to spin up the OCP Container for Smoke Testing.  Exception:");
