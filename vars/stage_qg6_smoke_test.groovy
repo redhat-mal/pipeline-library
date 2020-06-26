@@ -41,9 +41,11 @@ def call() {
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
 				timeout(time: 5, unit: 'MINUTES') {
+                                        println("Check APP");
 					def url = APP_URL + SERVLET_CONTEXT_PATH  +  "/actuator/heartbeat"
 
-					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + '); do sleep 5; done;'
+					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + ')i; do sleep 5; done;'
+                                        println("wait:" + wait_for_app);
 					println("Sleeping for 5 sec and wait for the Spring Boot App to startup - " + url);
 					sh wait_for_app
 				}
