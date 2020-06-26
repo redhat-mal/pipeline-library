@@ -6,9 +6,9 @@ def call() {
 			echo 'Stop and remove the existing container (If any exists)'
 			try {
 				//def pod_stop = 'docker stop ' + SERVICE_NAME
-				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT
+				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke 
 				sh ocp_remove
-                                def ocp_svc_remove = 'oc delete svc ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT
+                                def ocp_svc_remove = 'oc delete svc ' + SERVICE_NAME + '-smoke 
                                 sh ocp_svc_remove
 
 			} catch (Exception ex) {
@@ -19,11 +19,11 @@ def call() {
 			try {
 				echo 'Run the Docker Image'
 				def ocp_run = 'oc run ' + SERVICE_NAME + '-smoke --env PHASE=SMOKE_TEST --image=' + IMAGE_NAME
-				sh ocp_run + ' --labels=app=' + SERVICE_NAME + '-smoke --restart=Never -n ' + DEV_PROJECT
+				sh ocp_run + ' --labels=app=' + SERVICE_NAME + '-smoke --restart=Never 
 
 				echo 'Check the status of the Docker Container. If the status is not running, sleep for a defined interval of 1 sec and check again until 1 min timeout'
 				timeout(time: 1, unit: 'MINUTES') {
-                                        def wait_for_ocp = 'while [ "`oc get pods ' + SERVICE_NAME + '-smoke -n att-dev --no-headers |  awk \'{print $3}\'`" != "Running" ]; do echo $i; done;';
+                                        def wait_for_ocp = 'while [ "`oc get pods ' + SERVICE_NAME + '-smoke --no-headers |  awk \'{print $3}\'`" != "Running" ]; do echo $i; done;';
 
 					//def wait_for_ocp = 'until [ "`oc get pods ' + SERVICE_NAME + '-smoke -n ' + DEV_PROJECT + ' --no-headers  |  awk {"print $3"}`"=="Running" ]; do sleep 1; done;'
 					println("Sleeping for 1 sec and wait for the Docker Container - " + SERVICE_NAME + " to start");
@@ -35,7 +35,7 @@ def call() {
 				//def inspectCmd = 'docker inspect --format=' + '\'' + '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' + '\' ' + SERVICE_NAME
 				APP_PORT =  "8080"
                                 def svcCmd = 'oc create svc clusterip' + SERVICE_NAME + '-smoke --tcp=8080:8080'
-				APP_URL = "http://" + SERVICE_NAME + "." + env.NODE_NAME + ":" + APP_PORT
+				APP_URL = "http://" + SERVICE_NAME + ":" + APP_PORT
 				println("OCP Container - " + SERVICE_NAME + " - Application Url: " + APP_URL);
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
