@@ -6,9 +6,9 @@ def call() {
 			echo 'Stop and remove the existing container (If any exists)'
 			try {
 				//def pod_stop = 'docker stop ' + SERVICE_NAME
-				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke 
+				def ocp_remove = 'oc delete pod ' + SERVICE_NAME + '-smoke' 
 				sh ocp_remove
-                                def ocp_svc_remove = 'oc delete svc ' + SERVICE_NAME + '-smoke 
+                                def ocp_svc_remove = 'oc delete svc ' + SERVICE_NAME + '-smoke' 
                                 sh ocp_svc_remove
 
 			} catch (Exception ex) {
