@@ -19,7 +19,7 @@ def call() {
 			try {
 				echo 'Run the Docker Image'
 				def ocp_run = 'oc run ' + SERVICE_NAME + '-smoke --env PHASE=SMOKE_TEST --image=' + IMAGE_NAME
-				sh ocp_run + ' --labels=app=' + SERVICE_NAME + '-smoke --restart=Never 
+				sh ocp_run + ' --labels=app=' + SERVICE_NAME + '-smoke --restart=Never' 
 
 				echo 'Check the status of the Docker Container. If the status is not running, sleep for a defined interval of 1 sec and check again until 1 min timeout'
 				timeout(time: 1, unit: 'MINUTES') {
@@ -40,7 +40,8 @@ def call() {
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
 				timeout(time: 5, unit: 'MINUTES') {
-					def url = APP_URL + env.SERVLET_CONTEXT_PATH + "/actuator/heartbeat"
+					def url = APP_URL + env.SERVLET_CONTEXT_PATH  
+                                         // "/actuator/heartbeat"
 
 					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + '); do sleep 5; done;'
 					println("Sleeping for 5 sec and wait for the Spring Boot App to startup - " + url);
