@@ -35,7 +35,7 @@ def call() {
 				//def inspectCmd = 'docker inspect --format=' + '\'' + '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' + '\' ' + SERVICE_NAME
 				APP_PORT =  "8080"
                                 def svcCmd = 'oc create svc clusterip' + SERVICE_NAME + '-smoke --tcp=8080:8080'
-				APP_URL = "http://" + SERVICE_NAME + ":" + APP_PORT
+				APP_URL = "http://" + SERVICE_NAME + "-smoke:" + APP_PORT
 				println("OCP Container - " + SERVICE_NAME + " - Application Url: " + APP_URL);
 
 				echo 'Check if the Spring Boot container has started. If it is not up, sleep for a defined interval of 5 sec and check again until 5 min timeout'
@@ -48,10 +48,10 @@ def call() {
 					sh wait_for_app
 				}
 			} catch (Exception ex) {
-				def docker_logs = 'docker logs --tail 1000 ' + SERVICE_NAME
+				def ocp_logs = 'ocp logs ' + SERVICE_NAME + '-smoke'
 				println("Smoke Testing Failed - Docker Logs - ");
-				sh docker_logs
-				println("Exception while trying to spin up the Docker Container for Smoke Testing.  Exception:");
+				sh ocp_logs
+				println("Exception while trying to spin up the OCP Container for Smoke Testing.  Exception:");
 				ex.printStackTrace();
                 if (params.IGNORE_SMOKETEST_FAILURE) {
                      echo "Smoke test failed, but we're ignoring the error."   
