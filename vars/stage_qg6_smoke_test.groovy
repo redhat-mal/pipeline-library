@@ -1,6 +1,6 @@
 def call() {
 	env.CHECKOUT_STATUS='false'
-        env.SERVLET_CONTEXT_PATH2='/'
+        env.SERVLET_CONTEXT_PATH2=''
 	//if (func_not_skip_quality_gate('QG6')) {
 		//func_idp_monitor_stage ('Smoke Test - QG6') {
 			echo 'Stage: Smoke Test - Start'
