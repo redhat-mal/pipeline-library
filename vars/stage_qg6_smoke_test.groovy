@@ -97,8 +97,8 @@ def call() {
 			finally {
 				try {
 					echo 'Stop and remove the ocp container'
-					def pod_remove = 'ocp delete pod  ' + SERVICE_NAME + '-smoke'
-                                        def svc_remove = 'ocp delete svc  ' + SERVICE_NAME + '-smoke'
+					def pod_remove = 'oc delete pod  ' + SERVICE_NAME + '-smoke'
+                                        def svc_remove = 'oc delete svc  ' + SERVICE_NAME + '-smoke'
 					sh pod_remove
 					sh svc_remove
 				} catch(Exception ex) {
