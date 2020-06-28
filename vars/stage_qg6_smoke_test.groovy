@@ -46,7 +46,7 @@ def call() {
                                         println("Check APP" + env.SERVLET_CONTEXT_PATH2);
 					def url = APP_URL + env.SERVLET_CONTEXT_PATH2  +  "/actuator/heartbeat"
                                         println("URL:" + url);
-					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + ')i; do sleep 5; done;'
+					def wait_for_app = 'until $(curl --output /dev/null --silent --head --fail ' + url + '); do sleep 5; done;'
                                         println("wait:" + wait_for_app);
 					println("Sleeping for 5 sec and wait for the Spring Boot App to startup - " + url);
 					sh wait_for_app
